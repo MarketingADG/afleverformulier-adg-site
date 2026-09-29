@@ -1,0 +1,47 @@
+/* Alleen wat overzicht.html extra nodig heeft bovenop componenten.css. */
+
+.lijst-kop input[type=search]{flex:1 1 100%}
+.lijst-kop select{flex:1 1 0;min-width:120px}
+.item-del-plek{flex:none;width:30px}
+.lijst-kop input[type=search]{-webkit-appearance:none;appearance:none}
+
+/* een rij: links klant en meta, rechts nummer en moment, helemaal rechts de verwijderknop */
+.lijst-item{min-width:0}
+.lijst-item .links{min-width:0;flex:1}
+.lijst-item .who{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lijst-item .who .zonder{font-weight:600;color:var(--muted)}
+.lijst-item .meta2{overflow-wrap:anywhere;line-height:1.4}
+.lijst-item .rechts{text-align:right;flex:none}
+.lijst-item .nr{font-weight:700;font-size:12px;font-variant-numeric:tabular-nums}
+.lijst-item .rechts .meta2{white-space:nowrap}
+.lijst-item:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--focus)}
+
+/* het aankomen van rijen mag de hoverbeweging van .lijst-item niet blijven overschrijven */
+.lijst-item.in-beeld{animation-fill-mode:backwards}
+
+.item-del{
+  flex:none;display:inline-flex;align-items:center;justify-content:center;
+  width:30px;height:30px;border-radius:var(--r-sm);
+  background:none;border:1px solid transparent;color:var(--muted);cursor:pointer;
+  transition:color var(--duur-snel) var(--ease-in-out),border-color var(--duur-snel),background var(--duur-snel);
+}
+.item-del:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft)}
+.item-del:focus-visible{outline:none;box-shadow:0 0 0 3px var(--focus);color:var(--accent)}
+.item-del:disabled{opacity:.45;cursor:default}
+.item-del svg{width:15px;height:15px;pointer-events:none}
+
+.lijst-leeg .knop-klein{width:auto;margin:8px auto 0;display:block;color:var(--accent);text-decoration:underline}
+.melding .knop-sec{margin-left:10px;padding:5px 10px}
+
+@media (max-width:560px){
+  .kaart.breed{padding:20px 16px}
+  .scherm.boven{padding:16px 10px}
+  .lijst{max-height:none}
+  .lijst-item{flex-wrap:wrap}
+  .lijst-item .links{flex-basis:100%}
+  .lijst-item .rechts{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex:1}
+  .item-del-plek{display:none}
+  .lijst-kop select{flex:1 1 40%}
+  .lijst-item .rechts .meta2{white-space:normal}
+  .knop-rij{grid-template-columns:1fr}
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="nl" class="wacht-op-login">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>ADG Afleverformulier</title>
+<link rel="stylesheet" href="css/huisstijl.css">
+<link rel="stylesheet" href="css/componenten.css">
+<link rel="stylesheet" href="css/animaties.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.js"
+        integrity="sha384-faMlYZUtkJj+Sh6Bmu/L0GzPcraRWN6CW+9RH3GUrK/Z0WS9tgaNNt0tHiLxsbdb"
+        crossorigin="anonymous"></script>
+<script src="js/config.js"></script>
+<script src="js/gegevens.js"></script>
+<script src="js/sessie.js"></script>
+</head>
+<body>
+
+<!-- Startkeuze na het inloggen, zelfde opbouw als in de offertemodule. -->
+<div class="scherm">
+  <div class="kaart">
+    <h1>ADG<span>.</span> Afleverformulier</h1>
+    <p class="kaart-sub" id="begroeting">Wat wil je doen?</p>
+    <div class="melding let-op hidden" id="geen_dashboard">Je hebt geen toegang tot het dashboard. Vraag Jasper om je toegang te geven.</div>
+    <button type="button" class="knop-primair" onclick="location.href='formulier.html'">+ Nieuw afleverformulier</button>
+    <button type="button" class="knop-keuze" onclick="location.href='overzicht.html'">Alle afleverformulieren bekijken</button>
+    <button type="button" class="knop-keuze hidden" id="dash_knop" onclick="location.href='dashboard.html'">Dashboard</button>
+    <button type="button" class="knop-klein" style="margin-top:22px" onclick="location.href='wachtwoord.html'">Wachtwoord wijzigen</button>
+    <button type="button" class="knop-klein" style="margin-top:0" onclick="uitloggen()">Uitloggen</button>
+  </div>
+</div>
+
+<script>
+(async () => {
+  const ik = await vereisLogin();
+  if (!ik) return;
+  document.getElementById("begroeting").textContent = "Ingelogd als " + naamVan(ik.naam, ik.username) + ". Wat wil je doen?";
+  if (ik.can_dashboard) document.getElementById("dash_knop").classList.remove("hidden");
+  if (new URLSearchParams(location.search).get("geen") === "dashboard") document.getElementById("geen_dashboard").classList.remove("hidden");
+})();
+</script>
+</body>
+</html>

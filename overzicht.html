@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="nl" class="wacht-op-login">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>ADG Afleverformulieren</title>
+<link rel="stylesheet" href="css/huisstijl.css">
+<link rel="stylesheet" href="css/componenten.css">
+<link rel="stylesheet" href="css/animaties.css">
+<link rel="stylesheet" href="css/overzicht.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.js"
+        integrity="sha384-faMlYZUtkJj+Sh6Bmu/L0GzPcraRWN6CW+9RH3GUrK/Z0WS9tgaNNt0tHiLxsbdb"
+        crossorigin="anonymous"></script>
+<script src="js/config.js"></script>
+<script src="js/gegevens.js"></script>
+<script src="js/sessie.js"></script>
+</head>
+<body>
+
+<!-- Alle afleverformulieren van het team, zelfde opbouw als /offertes in de offertemodule. -->
+<div class="scherm boven">
+  <div class="kaart breed">
+    <h1>ADG<span>.</span> Afleverformulieren</h1>
+
+    <div class="lijst-kop">
+      <input id="zoek" type="search" placeholder="Zoek op klant, order, kenteken, formuliernummer of verkoper" aria-label="Zoeken" autocomplete="off">
+      <select id="f_vestiging" aria-label="Vestiging"></select>
+      <select id="f_status" aria-label="Status">
+        <option value="">Alle statussen</option>
+        <option value="concept">Concept</option>
+        <option value="ingediend">Ingediend</option>
+      </select>
+      <select id="f_verkoper" aria-label="Verkoper"><option value="">Alle verkopers</option></select>
+      <select id="f_sortering" aria-label="Sortering">
+        <option value="gewijzigd">Laatst gewijzigd</option>
+        <option value="afleverdatum">Afleverdatum</option>
+      </select>
+    </div>
+
+    <div class="melding let-op hidden" id="verwijder_fout" role="alert"></div>
+    <div class="lb-note" id="telling"></div>
+    <div class="lijst" id="lijst" aria-live="polite">
+      <div class="laadvlak laadregel"></div><div class="laadvlak laadregel"></div><div class="laadvlak laadregel"></div>
+      <div class="laadvlak laadregel"></div><div class="laadvlak laadregel"></div>
+    </div>
+
+    <div class="knop-rij">
+      <button class="knop-sec" type="button" onclick="location.href='formulier.html'">+ Nieuw afleverformulier</button>
+      <button class="knop-sec" type="button" onclick="location.href='start.html'">Terug naar start</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/overzicht.js"></script>
+</body>
+</html>

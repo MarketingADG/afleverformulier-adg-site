@@ -1,0 +1,55 @@
+/* ==========================================================================
+   Lichte animaties, in de stijl van Tailwind: korte duur (150 tot 300 ms), de
+   ease-out-curve van Tailwind, en alleen verschuiven en vervagen. Geen Tailwind
+   zelf: de CDN-versie is niet bedoeld voor live sites, en de nette versie vraagt
+   een bouwstap die dit project niet heeft.
+
+   Gebruik: zet class="in-beeld" op iets dat bij het laden zacht moet verschijnen.
+   Voor een rij na elkaar: style="--i:0", "--i:1", ... (of laat JS dat zetten).
+   Wie in zijn systeem "minder beweging" heeft aangezet, krijgt geen animaties.
+   ========================================================================== */
+
+:root{
+  --ease-out:cubic-bezier(.16,1,.3,1); /* zacht uitlopend, voor binnenkomen en bewegen */
+  --ease-in-out:cubic-bezier(.4,0,.2,1);
+  --duur-snel:150ms;
+  --duur:200ms;
+  --duur-traag:300ms;
+}
+
+@keyframes in-beeld{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes vervaag-in{from{opacity:0}to{opacity:1}}
+@keyframes zoom-in{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+
+.in-beeld{animation:in-beeld var(--duur-traag) var(--ease-out) both;animation-delay:calc(var(--i,0) * 40ms)}
+.vervaag-in{animation:vervaag-in var(--duur-traag) var(--ease-out) both}
+.zoom-in{animation:zoom-in var(--duur) var(--ease-out) both}
+
+/* kaarten en inlogscherm komen binnen */
+.kaart,.auth-main{animation:in-beeld var(--duur-traag) var(--ease-out) both}
+.auth-aside .copy{animation:in-beeld 500ms var(--ease-out) 120ms both}
+@keyframes merk-in{from{opacity:0;transform:translateX(24px)}to{opacity:.10;transform:none}}
+.auth-aside .merk{animation:merk-in 900ms var(--ease-out) both}
+
+/* meebewegen bij aanwijzen en klikken */
+.knop-keuze,.lijst-item,.tile{transition:border-color var(--duur-snel) var(--ease-in-out),box-shadow var(--duur) var(--ease-in-out),transform var(--duur) var(--ease-out)}
+.knop-keuze:hover,.lijst-item:hover{transform:translateY(-1px)}
+.knop-primair,.auth-submit,.knop-sec{transition:background var(--duur-snel) var(--ease-in-out),border-color var(--duur-snel),color var(--duur-snel),transform var(--duur-snel) var(--ease-out)}
+.knop-primair:active,.auth-submit:active,.knop-keuze:active,.knop-sec:active{transform:scale(.98)}
+
+/* een foutmelding schudt heel even, zodat je ziet dat er iets nieuws staat */
+@keyframes schud{0%,100%{transform:none}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+.schud{animation:schud 240ms var(--ease-in-out)}
+
+/* laadvlak: grijze balk met een lichtstreep die eroverheen trekt, in de vorm van wat
+   er straks komt te staan. Gebruik in plaats van een draaiend rondje bij lijsten. */
+@keyframes glans{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.laadvlak{position:relative;overflow:hidden;background:var(--surface-2);border-radius:var(--r-sm)}
+.laadvlak::after{content:"";position:absolute;inset:0;transform:translateX(-100%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);
+  animation:glans 1.2s var(--ease-in-out) infinite}
+.laadregel{height:52px;margin-bottom:6px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}

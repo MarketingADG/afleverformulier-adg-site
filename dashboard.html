@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="nl" class="wacht-op-login">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>ADG Afleverdashboard</title>
+<link rel="stylesheet" href="css/huisstijl.css">
+<link rel="stylesheet" href="css/componenten.css">
+<link rel="stylesheet" href="css/animaties.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.js"
+        integrity="sha384-faMlYZUtkJj+Sh6Bmu/L0GzPcraRWN6CW+9RH3GUrK/Z0WS9tgaNNt0tHiLxsbdb"
+        crossorigin="anonymous"></script>
+<script src="js/config.js"></script>
+<script src="js/gegevens.js"></script>
+<script src="js/sessie.js"></script>
+</head>
+<body>
+
+<!-- Afleverdashboard, zelfde opbouw als /dashboard in de offertemodule. Alleen met dashboardrecht. -->
+<div class="scherm boven">
+  <div class="kaart dash">
+    <h1>ADG<span>.</span> Afleverdashboard</h1>
+
+    <div class="dash-filters">
+      <select id="d_periode" aria-label="Periode">
+        <option value="7">Laatste 7 dagen</option>
+        <option value="14">Laatste 14 dagen</option>
+        <option value="30" selected>Laatste 30 dagen</option>
+        <option value="90">Laatste 90 dagen</option>
+        <option value="jaar">Dit jaar</option>
+      </select>
+      <select id="d_soort" aria-label="Soort voertuig">
+        <option value="">Nieuw en occasion</option>
+        <option value="Nieuw">Alleen nieuw</option>
+        <option value="Occasion">Alleen occasions</option>
+      </select>
+      <select id="d_vestiging" aria-label="Vestiging"></select>
+      <span class="ruimte"></span>
+      <button class="knop-sec" type="button" onclick="location.href='start.html'">Terug</button>
+      <button class="knop-sec" type="button" onclick="uitloggen()">Uitloggen</button>
+    </div>
+
+    <div id="d_fout"></div>
+
+    <div class="dash-h">Aankomende afleveringen</div>
+    <div class="lb-note">De komende 14 dagen op afleverdatum, los van de gekozen periode. Een formulier moet uiterlijk 6 dagen voor de aflevering binnen zijn.</div>
+    <div id="d_komend" class="ds-wrap"></div>
+
+    <div class="dash-h">Gekozen periode</div>
+    <div class="lb-note" id="d_periode_note">Op aanmaakdatum van het formulier.</div>
+    <div class="dash-tiles" id="d_tegels"></div>
+
+    <div class="dash-h">Polis en financiering</div>
+    <div class="lb-note">Alleen ingediende formulieren waar de vraag is ingevuld. Percentages zijn afgerond op hele getallen.</div>
+    <div id="d_pf"></div>
+
+    <div class="dash-h">Per verkoper</div>
+    <div class="lb-note">Aantal formulieren, daarnaast polis en financiering afgesloten van het aantal ingediende met antwoord.</div>
+    <div id="d_verkopers"></div>
+
+    <div class="dash-h">Per vestiging</div>
+    <div id="d_vestigingen"></div>
+
+    <div class="dash-h">Laatste formulieren</div>
+    <div id="d_laatste"></div>
+  </div>
+</div>
+
+<script src="js/dashboard.js"></script>
+</body>
+</html>

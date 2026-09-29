@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="nl" class="wacht-op-login">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>ADG Afleverformulier</title>
+<link rel="stylesheet" href="css/huisstijl.css">
+<link rel="stylesheet" href="css/componenten.css">
+<link rel="stylesheet" href="css/animaties.css">
+<link rel="stylesheet" href="css/formulier.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.js"
+        integrity="sha384-faMlYZUtkJj+Sh6Bmu/L0GzPcraRWN6CW+9RH3GUrK/Z0WS9tgaNNt0tHiLxsbdb"
+        crossorigin="anonymous"></script>
+<script src="js/config.js"></script>
+<script src="js/gegevens.js"></script>
+<script src="js/sessie.js"></script>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- ================= FORMULIER (links) ================= -->
+  <aside class="form-pane">
+    <div class="pane-scroll" id="paneScroll">
+      <button type="button" class="back-btn" id="terugKnop">&larr; Terug naar start</button>
+      <h1>ADG<span>.</span> Afleverformulier</h1>
+      <div class="sub" id="subregel">Nieuw formulier, nog niet opgeslagen</div>
+      <p class="lead">Uiterlijk 6 dagen voor aflevering indienen bij administratie. Kopie bij verkooporder.</p>
+
+      <div id="meldingen">
+        <div class="melding hidden" id="melding_eigenaar" role="status"></div>
+        <div class="melding let-op hidden" id="melding_regels" role="alert" tabindex="-1"></div>
+      </div>
+
+      <form id="adgForm" autocomplete="off" novalidate>
+
+        <fieldset class="in-beeld" style="--i:0">
+          <legend>1 · Basisgegevens</legend>
+          <p class="sectie-sub">Klantgegevens en orderinformatie</p>
+          <div class="row2">
+            <div>
+              <label class="required" for="vestiging">Vestiging</label>
+              <select id="vestiging" name="vestiging" required>
+                <option value="">Kies</option>
+                <option>Assen</option>
+                <option>Emmen</option>
+                <option>Hoogeveen Toyota</option>
+                <option>Hoogeveen Suzuki</option>
+                <option>Groningen Toyota</option>
+                <option>Groningen Lexus</option>
+                <option>Veendam Toyota</option>
+                <option>Veendam Suzuki</option>
+              </select>
+            </div>
+            <div>
+              <label class="required" for="ordernummer">Ordernummer</label>
+              <input type="text" inputmode="numeric" pattern="[0-9]*" id="ordernummer" name="ordernummer" placeholder="Alleen cijfers" required>
+            </div>
+          </div>
+          <div class="row2">
+            <div>
+              <label class="required" for="orderdatum">Orderdatum</label>
+              <input type="date" id="orderdatum" name="orderdatum" required>
+            </div>
+            <div>
+              <label class="required" for="klantnaam">Klantnaam</label>
+              <input type="text" id="klantnaam" name="klantnaam" placeholder="Voornaam Achternaam" required>
+            </div>
+          </div>
+          <div class="row2">
+            <div>
+              <label class="required" for="email_factuur">E-mailadres voor factuur</label>
+              <input type="email" id="email_factuur" name="email_factuur" placeholder="naam@voorbeeld.nl" required>
+            </div>
+            <div>
+              <label class="required" for="email_pech">E-mailadres voor pechhulppas</label>
+              <input type="email" id="email_pech" name="email_pech" placeholder="naam@voorbeeld.nl" required>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="in-beeld" style="--i:1">
+          <legend>2 · Polis</legend>
+          <p class="sectie-sub">Bij antwoord nee opent automatisch een vervolgvenster</p>
+          <div class="row2">
+            <div>
+              <label class="required" for="polis_besproken">Polis besproken?</label>
+              <select id="polis_besproken" name="polis_besproken" required>
+                <option value="">Kies</option>
+                <option>Ja</option>
+                <option>Nee</option>
+              </select>
+              <div id="polis_besproken_info" class="info-pill">Reden voor niet besproken is vastgelegd.</div>
+            </div>
+            <div>
+              <label class="required" for="polis_afgesloten">Polis afgesloten?</label>
+              <select id="polis_afgesloten" name="polis_afgesloten" required>
+                <option value="">Kies</option>
+                <option>Ja</option>
+                <option>Nee</option>
+              </select>
+              <div class="hint">Wordt automatisch op nee gezet als polis niet besproken is.</div>
+              <div id="polis_afgesloten_info" class="info-pill">Reden voor niet afgesloten is vastgelegd.</div>
+            </div>
+          </div>
+          <input type="hidden" id="polis_besproken_reden" name="polis_besproken_reden">
+          <input type="hidden" id="polis_besproken_toelichting" name="polis_besproken_toelichting">
+          <input type="hidden" id="polis_afgesloten_reden" name="polis_afgesloten_reden">
+          <input type="hidden" id="polis_afgesloten_toelichting" name="polis_afgesloten_toelichting">
+        </fieldset>
+
+        <fieldset class="in-beeld" style="--i:2">
+          <legend>3 · Financiering</legend>
+          <p class="sectie-sub">Bij antwoord nee opent automatisch een vervolgvenster</p>
+          <div class="row2">
+            <div>
+              <label class="required" for="fin_besproken">Financiering besproken?</label>
+              <select id="fin_besproken" name="fin_besproken" required>
+                <option value="">Kies</option>
+                <option>Ja</option>
+                <option>Nee</option>
+              </select>
+              <div id="fin_besproken_info" class="info-pill">Reden voor niet besproken is vastgelegd.</div>
+            </div>
+            <div>
+              <label class="required" for="fin_afgesloten">Financiering afgesloten?</label>
+              <select id="fin_afgesloten" name="fin_afgesloten" required>
+                <option value="">Kies</option>
+                <option>Ja</option>
+                <option>Nee</option>
+              </select>
+              <div class="hint">Wordt automatisch op nee gezet als financiering niet besproken is.</div>
+              <div id="fin_afgesloten_info" class="info-pill">Reden voor niet afgesloten is vastgelegd.</div>
+            </div>
+          </div>
+          <input type="hidden" id="fin_besproken_reden" name="fin_besproken_reden">
+          <input type="hidden" id="fin_besproken_toelichting" name="fin_besproken_toelichting">
+          <input type="hidden" id="fin_afgesloten_reden" name="fin_afgesloten_reden">
+          <input type="hidden" id="fin_afgesloten_toelichting" name="fin_afgesloten_toelichting">
+        </fieldset>
+
+        <fieldset class="in-beeld" style="--i:3">
+          <legend>4 · Voertuig</legend>
+          <p class="sectie-sub">Type deal en afleverplanning</p>
+          <div class="row2">
+            <div>
+              <label class="required" for="soort_voertuig">Nieuw of occasion</label>
+              <select id="soort_voertuig" name="soort_voertuig" required>
+                <option value="">Kies</option>
+                <option>Nieuw</option>
+                <option>Occasion</option>
+              </select>
+            </div>
+            <div>
+              <label class="required" for="afleverdatum">Afleverdatum</label>
+              <input type="date" id="afleverdatum" name="afleverdatum" required>
+            </div>
+          </div>
+          <div class="row2">
+            <div>
+              <label class="required" for="aflevertijd">Aflevertijd</label>
+              <input type="time" id="aflevertijd" name="aflevertijd" required>
+            </div>
+            <div>
+              <label for="agenda_opmerking">Agenda opmerking</label>
+              <input type="text" id="agenda_opmerking" name="agenda_opmerking" placeholder="Bijvoorbeeld afleverruimte 1">
+              <div class="hint">Echte Outlook agenda koppeling bouwen we later via Microsoft 365.</div>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="in-beeld" style="--i:4">
+          <legend>5 · Inruil</legend>
+          <p class="sectie-sub">Eerst vaststellen of er sprake is van inruil</p>
+          <div class="row2">
+            <div>
+              <label class="required" for="inruil">Inruil?</label>
+              <select id="inruil" name="inruil" required>
+                <option value="">Kies</option>
+                <option>Ja</option>
+                <option>Nee</option>
+              </select>
+            </div>
+            <div id="blok_eigen_merk" class="hidden">
+              <label for="eigen_merk">Eigen merk?</label>
+              <select id="eigen_merk" name="eigen_merk">
+                <option value="">Kies</option>
+                <option>Ja</option>
+                <option>Nee</option>
+              </select>
+              <div class="hint">Bij nieuw relevant als er sprake is van inruil.</div>
+            </div>
+          </div>
+          <div class="row2">
+            <div id="blok_boekwaarde" class="hidden">
+              <label for="boekwaarde">Boekwaarde</label>
+              <input type="number" step="0.01" id="boekwaarde" name="boekwaarde" placeholder="0,00">
+              <div class="hint">Bij nieuw invullen als geen eigen merk. Bij occasion invullen als er inruil is.</div>
+            </div>
+            <div>
+              <label for="extra_notitie">Extra notitie voor verkoopleider of administratie</label>
+              <textarea id="extra_notitie" name="extra_notitie" placeholder="Bijzonderheden, afspraken of opmerkingen"></textarea>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="in-beeld hidden" style="--i:0" id="blok_nieuw">
+          <legend>6 · Nieuw, alleen invullen bij nieuw</legend>
+          <p class="sectie-sub">IVN, DAD, premies en registratiedatum</p>
+          <div class="row2">
+            <div>
+              <label for="ivn_bekend">IVN bekend?</label>
+              <select id="ivn_bekend" name="ivn_bekend">
+                <option value="">Kies</option>
+                <option>Ja</option>
+                <option>Nee</option>
+              </select>
+            </div>
+            <div>
+              <label for="ivn">IVN, intern voertuig nummer</label>
+              <input type="text" id="ivn" name="ivn" placeholder="Invullen als bekend">
+            </div>
+          </div>
+          <div class="row2">
+            <div>
+              <label for="dad">DAD, datum aankomst dealer</label>
+              <input type="date" id="dad" name="dad">
+            </div>
+            <div>
+              <label for="voorraadpremie_van_toepassing">Voorraadpremie van toepassing?</label>
+              <select id="voorraadpremie_van_toepassing" name="voorraadpremie_van_toepassing">
+                <option value="">Kies</option>
+                <option>Ja</option>
+                <option>Nee</option>
+              </select>
+            </div>
+          </div>
+          <div class="row2">
+            <div id="blok_voorraad_bedrag" class="hidden">
+              <label for="voorraadpremie_bedrag">Hoogte voorraadpremie</label>
+              <input type="number" step="0.01" id="voorraadpremie_bedrag" name="voorraadpremie_bedrag" placeholder="0,00">
+              <div class="hint">Alleen invullen als voorraadpremie van toepassing is.</div>
+            </div>
+            <div id="blok_inruilpremie_van_toepassing" class="hidden">
+              <label for="inruilpremie_van_toepassing">Inruilpremie van toepassing?</label>
+              <select id="inruilpremie_van_toepassing" name="inruilpremie_van_toepassing">
+                <option value="">Kies</option>
+                <option>Ja</option>
+                <option>Nee</option>
+              </select>
+              <div class="hint">Alleen relevant als er sprake is van inruil.</div>
+            </div>
+          </div>
+          <div class="row2">
+            <div id="blok_inruil_bedrag" class="hidden">
+              <label for="inruilpremie_bruto">Inruilpremie, bruto</label>
+              <input type="number" step="0.01" id="inruilpremie_bruto" name="inruilpremie_bruto" placeholder="0,00">
+              <div class="hint">Alleen invullen als inruilpremie van toepassing is.</div>
+            </div>
+            <div>
+              <label for="verhouding">Standaard verhouding</label>
+              <input type="text" id="verhouding" name="verhouding" value="60/40">
+            </div>
+          </div>
+          <div class="row2">
+            <div>
+              <label for="uiterste_registratiedatum">Uiterste registratiedatum, in verband met premie</label>
+              <input type="date" id="uiterste_registratiedatum" name="uiterste_registratiedatum">
+            </div>
+            <div>
+              <label for="nieuw_notitie">Extra notitie nieuw</label>
+              <textarea id="nieuw_notitie" name="nieuw_notitie" placeholder="Bijzonderheden rondom voertuig, premie of planning"></textarea>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="in-beeld hidden" style="--i:0" id="blok_occasion">
+          <legend>6 · Occasion, alleen invullen bij occasion</legend>
+          <p class="sectie-sub">Alleen kenteken is nodig</p>
+          <div class="row2">
+            <div>
+              <label class="required" for="kenteken">Kenteken</label>
+              <input type="text" id="kenteken" name="kenteken" placeholder="Bijvoorbeeld AB-123-C">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="in-beeld" style="--i:5">
+          <legend>7 · Financiële afhandeling</legend>
+          <p class="sectie-sub">Bedrag dat de klant aan ADG overmaakt</p>
+          <div class="row2">
+            <div>
+              <label class="required" for="toe_te_betalen">Toe te betalen bedrag</label>
+              <input type="number" step="0.01" id="toe_te_betalen" name="toe_te_betalen" placeholder="0,00" required>
+            </div>
+            <div>
+              <label for="betaal_opmerking">Opmerking betaling</label>
+              <textarea id="betaal_opmerking" name="betaal_opmerking" placeholder="Bijvoorbeeld restant na inruil, factuur reeds verstuurd"></textarea>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="in-beeld" style="--i:6">
+          <legend>8 · Opmerkingen</legend>
+          <label for="algemene_opmerking">Opmerkingen of bijzonderheden</label>
+          <textarea id="algemene_opmerking" name="algemene_opmerking" placeholder="Vrij veld voor aanvullende opmerkingen of bijzonderheden"></textarea>
+          <p class="hint">Indienen opent je mailprogramma met de administratie als ontvanger en de juiste verkoopleider in cc.</p>
+        </fieldset>
+
+      </form>
+    </div>
+
+    <!-- vaste voet met de knoppen -->
+    <div class="pane-voet">
+      <div class="voet-status" id="voetStatus" role="status" aria-live="polite"></div>
+      <div class="voet-knoppen">
+        <button type="button" class="knop-sec" id="knopOpslaan">Opslaan</button>
+        <button type="button" class="knop-sec" id="knopPrint">Print</button>
+        <button type="button" class="knop-primair" id="knopIndienen">Indienen</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= A4-VOORBEELD (rechts) ================= -->
+  <main class="preview">
+    <div class="sheet" id="a4blad">
+      <div class="print-sheet">
+        <div class="print-header">
+          <img src="assets/adg-groep.svg" alt="ADG Groep">
+          <div class="print-titel">
+            <h1>ADG Afleverformulier</h1>
+            <p>Formuliernummer <span id="p_nummer">nog niet opgeslagen</span></p>
+          </div>
+        </div>
+
+        <div class="print-section">
+          <h3>Basisgegevens</h3>
+          <div class="print-grid">
+            <div class="print-item"><strong>Vestiging</strong><span id="p_vestiging"></span></div>
+            <div class="print-item"><strong>Ordernummer</strong><span id="p_ordernummer"></span></div>
+            <div class="print-item"><strong>Orderdatum</strong><span id="p_orderdatum"></span></div>
+            <div class="print-item"><strong>Klantnaam</strong><span id="p_klantnaam"></span></div>
+            <div class="print-item"><strong>E-mailadres factuur</strong><span id="p_email_factuur"></span></div>
+            <div class="print-item"><strong>E-mailadres pechhulppas</strong><span id="p_email_pech"></span></div>
+          </div>
+        </div>
+
+        <div class="print-section">
+          <h3>Polis en financiering</h3>
+          <div class="print-grid">
+            <div class="print-item"><strong>Polis besproken</strong><span id="p_polis_besproken"></span></div>
+            <div class="print-item"><strong>Polis afgesloten</strong><span id="p_polis_afgesloten"></span></div>
+            <div class="print-item"><strong>Waarom polis niet besproken</strong><span id="p_polis_besproken_reden"></span></div>
+            <div class="print-item"><strong>Waarom polis niet afgesloten</strong><span id="p_polis_afgesloten_reden"></span></div>
+            <div class="print-item"><strong>Financiering besproken</strong><span id="p_fin_besproken"></span></div>
+            <div class="print-item"><strong>Financiering afgesloten</strong><span id="p_fin_afgesloten"></span></div>
+            <div class="print-item"><strong>Waarom financiering niet besproken</strong><span id="p_fin_besproken_reden"></span></div>
+            <div class="print-item"><strong>Waarom financiering niet afgesloten</strong><span id="p_fin_afgesloten_reden"></span></div>
+            <div class="print-item print-wide"><strong>Toelichting polis niet besproken</strong><span id="p_polis_besproken_toelichting"></span></div>
+            <div class="print-item print-wide"><strong>Toelichting polis niet afgesloten</strong><span id="p_polis_afgesloten_toelichting"></span></div>
+            <div class="print-item print-wide"><strong>Toelichting financiering niet besproken</strong><span id="p_fin_besproken_toelichting"></span></div>
+            <div class="print-item print-wide"><strong>Toelichting financiering niet afgesloten</strong><span id="p_fin_afgesloten_toelichting"></span></div>
+          </div>
+        </div>
+
+        <div class="print-section">
+          <h3>Voertuig en inruil</h3>
+          <div class="print-grid">
+            <div class="print-item"><strong>Nieuw of occasion</strong><span id="p_soort_voertuig"></span></div>
+            <div class="print-item"><strong>Kenteken</strong><span id="p_kenteken"></span></div>
+            <div class="print-item"><strong>Afleverdatum</strong><span id="p_afleverdatum"></span></div>
+            <div class="print-item"><strong>Aflevertijd</strong><span id="p_aflevertijd"></span></div>
+            <div class="print-item"><strong>Agenda opmerking</strong><span id="p_agenda_opmerking"></span></div>
+            <div class="print-item"><strong>Inruil</strong><span id="p_inruil"></span></div>
+            <div class="print-item"><strong>Eigen merk</strong><span id="p_eigen_merk"></span></div>
+            <div class="print-item"><strong>Boekwaarde</strong><span id="p_boekwaarde"></span></div>
+            <div class="print-item print-wide"><strong>Extra notitie</strong><span id="p_extra_notitie"></span></div>
+          </div>
+        </div>
+
+        <div class="print-section">
+          <h3>Nieuw, alleen bij nieuw</h3>
+          <div class="print-grid">
+            <div class="print-item"><strong>IVN bekend</strong><span id="p_ivn_bekend"></span></div>
+            <div class="print-item"><strong>IVN</strong><span id="p_ivn"></span></div>
+            <div class="print-item"><strong>DAD</strong><span id="p_dad"></span></div>
+            <div class="print-item"><strong>Voorraadpremie van toepassing</strong><span id="p_voorraadpremie_van_toepassing"></span></div>
+            <div class="print-item"><strong>Hoogte voorraadpremie</strong><span id="p_voorraadpremie_bedrag"></span></div>
+            <div class="print-item"><strong>Inruilpremie van toepassing</strong><span id="p_inruilpremie_van_toepassing"></span></div>
+            <div class="print-item"><strong>Inruilpremie bruto</strong><span id="p_inruilpremie_bruto"></span></div>
+            <div class="print-item"><strong>Standaard verhouding</strong><span id="p_verhouding"></span></div>
+            <div class="print-item"><strong>Uiterste registratiedatum</strong><span id="p_uiterste_registratiedatum"></span></div>
+            <div class="print-item print-wide"><strong>Extra notitie nieuw</strong><span id="p_nieuw_notitie"></span></div>
+          </div>
+        </div>
+
+        <div class="print-section">
+          <h3>Financieel en opmerkingen</h3>
+          <div class="print-grid">
+            <div class="print-item"><strong>Toe te betalen bedrag</strong><span id="p_toe_te_betalen"></span></div>
+            <div class="print-item print-wide"><strong>Opmerking betaling</strong><span id="p_betaal_opmerking"></span></div>
+            <div class="print-item print-wide"><strong>Opmerkingen of bijzonderheden</strong><span id="p_algemene_opmerking"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- formulier niet gevonden of niet te laden -->
+<div class="scherm hidden" id="nietGevonden">
+  <div class="kaart">
+    <img class="kaart-logo" src="assets/adg-groep.svg" alt="ADG Groep">
+    <h1>ADG<span>.</span> Afleverformulier</h1>
+    <p class="kaart-sub" id="nietGevondenTekst"></p>
+    <button type="button" class="knop-primair" onclick="location.href='overzicht.html'">Naar het overzicht</button>
+    <button type="button" class="knop-keuze hidden" id="nietGevondenOpnieuw" onclick="location.reload()">Opnieuw proberen</button>
+    <button type="button" class="knop-klein" onclick="location.href='start.html'">Terug naar start</button>
+  </div>
+</div>
+
+<!-- venster voor reden en toelichting -->
+<div id="modalBackdrop" class="modal-backdrop hidden">
+  <div class="kaart modal-kaart zoom-in" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h3 id="modalTitle">Reden opgeven</h3>
+    <p class="modal-intro" id="modalIntro">Vul hieronder de reden en toelichting in.</p>
+
+    <label for="modalReason">Reden</label>
+    <select id="modalReason">
+      <option value="">Kies</option>
+    </select>
+
+    <label for="modalNote">Toelichting</label>
+    <textarea id="modalNote" placeholder="Verplichte toelichting"></textarea>
+
+    <div class="modal-fout" id="modalFout" role="alert"></div>
+
+    <div class="knop-rij">
+      <button class="knop-sec" type="button" onclick="closeModal(true)">Annuleren</button>
+      <button class="knop-primair" type="button" id="modalOpslaan" onclick="saveModal()">Opslaan</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/formulier.js"></script>
+</body>
+</html>

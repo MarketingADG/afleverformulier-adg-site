@@ -1,0 +1,189 @@
+/* ==========================================================================
+   Bouwstenen die op meer dan één pagina voorkomen: inlogscherm, kaarten, knoppen,
+   velden, lijsten, tegels en tabellen. Laad na huisstijl.css.
+
+   Structuur en maten zijn één op één overgenomen uit de BYD-offertemodule
+   (site/index.html daar), met de ADG-kleuren uit huisstijl.css. Een pagina die iets
+   eigens nodig heeft, zet dat in een eigen bestand (css/formulier.css, enz.), niet hier.
+   ========================================================================== */
+
+/* ---------- inlogscherm, split-screen (index.html) ---------- */
+.auth-split{
+  min-height:100dvh;background:var(--surface);
+  display:grid;grid-template-columns:minmax(0,460px) 1fr;
+}
+.auth-form{
+  display:flex;flex-direction:column;
+  padding:44px 52px;width:100%;max-width:520px;margin:0 auto;min-height:100dvh;
+}
+.auth-brand{display:flex;align-items:center;gap:12px;padding-top:6px}
+.auth-brand img{height:26px;width:auto}
+.auth-main{margin:auto 0}
+.auth-form h1{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.auth-form .lead{font-size:13.5px;color:var(--muted);margin:10px 0 28px;line-height:1.5}
+.auth-field{margin-bottom:16px}
+.auth-field label{display:block;font-size:11px;font-weight:600;color:var(--ink-70);margin-bottom:6px}
+.auth-field input{
+  width:100%;background:var(--surface);border:1px solid var(--line);color:var(--ink);
+  border-radius:var(--r-md);padding:12px 14px;font-size:14px;outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+.auth-field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--focus)}
+.auth-submit{
+  width:100%;margin-top:6px;background:var(--accent);color:#fff;border:none;border-radius:var(--r-md);
+  padding:13px;font-size:14px;font-weight:700;cursor:pointer;
+  transition:background .15s,transform .05s;
+}
+.auth-submit:hover{background:var(--accent-ink)}
+.auth-submit:active{transform:translateY(1px)}
+.auth-error{color:var(--accent);font-size:12.5px;margin-top:12px;min-height:16px}
+.auth-foot{padding-top:24px;font-size:11px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px}
+.auth-aside{
+  position:relative;overflow:hidden;color:#fff;
+  background:radial-gradient(120% 90% at 100% 0%,#3a3a45 0%,var(--ink) 55%,#1c1c22 100%);
+}
+/* de G uit het ADG-logo als groot, half-transparant beeldmerk achter de tekst */
+.auth-aside .merk{position:absolute;right:-8%;top:8%;width:78%;max-width:640px;opacity:.10}
+.auth-aside .merk path{fill:#fff}
+.auth-aside .streep{position:absolute;left:56px;top:56px;width:44px;height:4px;border-radius:2px;background:var(--accent)}
+.auth-aside .copy{position:absolute;left:0;right:0;bottom:0;padding:56px}
+.auth-aside .eyebrow{
+  display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#fff;
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);
+  padding:6px 13px;border-radius:999px;margin-bottom:18px;
+}
+.auth-aside h2{font-size:29px;font-weight:800;letter-spacing:-.02em;line-height:1.16;max-width:16ch}
+.auth-aside p{font-size:14px;color:rgba(255,255,255,.80);margin-top:12px;max-width:42ch;line-height:1.5}
+@media (max-width:860px){
+  .auth-split{grid-template-columns:1fr}
+  .auth-aside{display:none}
+  .auth-form{padding:40px 26px;justify-content:center}
+}
+
+/* ---------- gecentreerde kaartpagina's (start, wachtwoord, overzicht, dashboard) ---------- */
+.scherm{
+  min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:var(--app-bg);
+}
+.scherm.boven{align-items:flex-start;padding-top:40px}
+.kaart{
+  width:340px;max-width:100%;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:32px 30px;color:var(--ink);box-shadow:var(--shadow-card);
+}
+.kaart.breed{width:760px;max-width:96vw;padding:28px}
+.kaart.dash{width:1000px;max-width:96vw;padding:28px}
+.kaart h1{font-size:20px;font-weight:800;letter-spacing:-.01em;text-align:center}
+.kaart h1 span{color:var(--accent)}
+.kaart.dash h1{text-align:left}
+.kaart-sub{font-size:12px;color:var(--muted);text-align:center;margin:6px 0 22px;line-height:1.5}
+.kaart label{display:block;font-size:11px;font-weight:600;color:var(--ink-70);margin:10px 0 4px}
+.kaart input,.kaart select{
+  width:100%;background:var(--surface);border:1px solid var(--line);color:var(--ink);
+  border-radius:var(--r-md);padding:11px 13px;font-size:13.5px;outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+.kaart input:focus,.kaart select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--focus)}
+.kaart-logo{display:block;height:22px;width:auto;margin:0 auto 18px}
+
+/* ---------- knoppen ---------- */
+.knop-primair{
+  width:100%;margin-top:18px;background:var(--accent);color:#fff;border:none;border-radius:var(--r-md);
+  padding:12px;font-size:13.5px;font-weight:700;cursor:pointer;
+  transition:background .15s,transform .05s;
+}
+.knop-primair:hover{background:var(--accent-ink)}
+.knop-primair:active{transform:translateY(1px)}
+.knop-primair:disabled{opacity:.55;cursor:default}
+.knop-keuze{
+  width:100%;margin-top:10px;background:var(--surface);color:var(--ink);border:1px solid var(--line);
+  border-radius:var(--r-md);padding:12px;font-size:13px;font-weight:600;cursor:pointer;
+  transition:border-color .15s,box-shadow .15s;
+}
+.knop-keuze:hover{border-color:var(--accent);box-shadow:var(--shadow-hover)}
+.knop-klein{
+  width:100%;margin-top:10px;background:none;border:none;color:var(--muted);
+  font-size:11.5px;font-weight:600;cursor:pointer;padding:6px;
+}
+.knop-klein:hover{color:var(--accent)}
+.knop-sec{
+  background:var(--surface);border:1px solid var(--line);color:var(--ink);
+  border-radius:9px;padding:9px 12px;font-size:11.5px;font-weight:600;cursor:pointer;
+  transition:border-color .15s,color .15s;
+}
+.knop-sec:hover{border-color:var(--accent);color:var(--accent)}
+.knop-rij{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.fout{color:var(--accent);font-size:12px;margin-top:10px;min-height:14px;text-align:center}
+/* draaiend laadteken naast de knoptekst zolang Supabase nog niet bevestigd heeft */
+.btn-busy::after{
+  content:"";display:inline-block;width:10px;height:10px;margin-left:7px;vertical-align:-1px;
+  border:2px solid currentColor;border-right-color:transparent;border-radius:50%;
+  animation:btnspin .7s linear infinite;
+}
+@keyframes btnspin{to{transform:rotate(360deg)}}
+
+/* ---------- lijsten (overzicht, laatste formulieren) ---------- */
+.lijst-kop{display:flex;gap:8px;margin:18px 0 12px;flex-wrap:wrap}
+.lijst-kop input,.lijst-kop select{
+  background:var(--surface);border:1px solid var(--line);color:var(--ink);
+  border-radius:var(--r-md);padding:10px 12px;font-size:13px;outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+.lijst-kop input{flex:2 1 220px}
+.lijst-kop select{flex:1 1 140px}
+.lijst-kop input:focus,.lijst-kop select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--focus)}
+.lijst{max-height:60vh;overflow-y:auto;min-height:140px}
+.lijst-item{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:12px 14px;border:1px solid var(--line);border-radius:var(--r-sm);margin-bottom:6px;
+  font-size:12px;cursor:pointer;background:var(--surface);transition:border-color .15s,box-shadow .15s;
+}
+.lijst-item:hover{border-color:var(--accent);box-shadow:var(--shadow-hover)}
+.lijst-item .who{font-weight:700;font-size:12.5px}
+.lijst-item .meta2{color:var(--muted);font-size:11px;margin-top:2px}
+.lijst-leeg{font-size:12px;color:var(--muted);padding:18px 4px;text-align:center}
+
+/* statuslabel: concept of ingediend */
+.badge{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.badge.concept{background:var(--surface-2);color:var(--ink-70);border:1px solid var(--line)}
+.badge.ingediend{background:var(--ok-soft);color:var(--ok)}
+
+/* melding boven een formulier of lijst: van wie is dit, mag je het aanpassen */
+.melding{
+  font-size:12px;line-height:1.45;padding:9px 12px;margin:0 0 12px;border-radius:var(--r-sm);
+  border:1px solid var(--line);background:var(--surface-2);color:var(--ink);
+}
+.melding.let-op{border-color:#fcd34d;background:var(--warn-soft);color:#92400e}
+.melding.ok{border-color:#a7d7bd;background:var(--ok-soft);color:#14532d}
+
+/* ---------- dashboard ---------- */
+.dash-filters{display:flex;gap:8px;margin:16px 0 4px;align-items:center;flex-wrap:wrap}
+.dash-filters select{
+  width:auto;background:var(--surface);border:1px solid var(--line);color:var(--ink);
+  border-radius:9px;padding:8px 11px;font-size:12.5px;outline:none;
+}
+.dash-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:12px;margin:16px 0 4px}
+.tile{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:16px}
+.tile .big{font-size:26px;font-weight:800;letter-spacing:-.02em}
+.tile .lbl{font-size:11px;color:var(--muted);margin-top:4px}
+.dash-h{
+  font-size:13px;font-weight:700;letter-spacing:-.01em;
+  color:var(--ink);margin:22px 0 10px;border-bottom:1px solid var(--line);padding-bottom:7px;
+}
+.lb-note{font-size:11.5px;color:var(--muted);margin:-2px 0 12px;line-height:1.5}
+.lb-row{display:grid;grid-template-columns:150px 1fr 66px;gap:10px;align-items:center;margin-bottom:8px;font-size:12.5px}
+.lb-row .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-row .track{height:16px;background:var(--surface-2);border-radius:8px;overflow:hidden}
+.lb-row .bar{height:16px;border-radius:8px;background:var(--accent);min-width:3px}
+.lb-row .bar.ok{background:var(--ok)}
+.lb-row .n{text-align:right;font-weight:700}
+.lb-row .n em{font-style:normal;font-weight:500;color:var(--muted)}
+.ds-wrap{overflow-x:auto}
+.ds-tbl{width:100%;border-collapse:collapse;font-size:12px}
+.ds-tbl th{font-size:11px;color:var(--muted);font-weight:700;text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.ds-tbl td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+.ds-tbl th.nr,.ds-tbl td.nr{text-align:right;white-space:nowrap}
+.ds-tbl tbody tr.klik{cursor:pointer}
+.ds-tbl tbody tr.klik:hover td{background:var(--surface-2)}
+.ds-tbl .sub{color:var(--muted);font-size:10.5px;margin-top:2px}
+.ds-tbl td.leeg{color:var(--muted)}

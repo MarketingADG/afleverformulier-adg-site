@@ -1,0 +1,200 @@
+/* ==========================================================================
+   Formulierpagina (formulier.html). Laad na huisstijl.css, componenten.css en
+   animaties.css. Alleen de variabelen uit huisstijl.css, geen losse kleurcodes.
+
+   Opbouw is een kloon van de BYD-offertemodule: links een vast formulierpaneel met
+   een vaste voet, rechts het A4-voorbeeld. Structuur en maten uit die module, de
+   kleuren en de letter uit de ADG-huisstijl.
+   ========================================================================== */
+
+/* ============ APP-INDELING ============ */
+.app{display:flex;min-height:100dvh}
+
+/* ---- formulierpaneel (links) ---- */
+.form-pane{
+  width:440px;flex:0 0 440px;
+  background:var(--surface);color:var(--ink);
+  height:100dvh;position:sticky;top:0;
+  border-right:1px solid var(--line);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+/* het deel dat scrolt; de voet eronder blijft staan */
+.pane-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;padding:28px 26px 24px}
+
+.form-pane h1{font-size:16px;font-weight:800;letter-spacing:-.01em}
+.form-pane h1 span{color:var(--accent)}
+.form-pane .sub{
+  font-size:11px;color:var(--muted);margin-top:4px;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.form-pane .lead{font-size:11.5px;color:var(--muted);line-height:1.5;margin:10px 0 20px}
+
+.back-btn{
+  display:inline-flex;align-items:center;gap:6px;background:none;border:none;
+  color:var(--muted);font-family:inherit;font-size:11.5px;font-weight:600;cursor:pointer;
+  padding:0;margin-bottom:16px;transition:color .15s;
+}
+.back-btn:hover{color:var(--accent)}
+
+/* ---- secties en velden ---- */
+.form-pane fieldset{border:none;margin:0 0 24px;min-width:0}
+.form-pane legend{
+  font-size:12px;font-weight:700;letter-spacing:-.01em;
+  color:var(--ink);margin-bottom:6px;display:block;width:100%;
+  border-bottom:1px solid var(--line);padding-bottom:6px;
+}
+.sectie-sub{font-size:11px;color:var(--muted);margin:0 0 4px;line-height:1.4}
+
+.form-pane label,.modal-kaart label{
+  display:block;font-size:11px;font-weight:600;color:var(--ink-70);margin:12px 0 4px;line-height:1.3;
+}
+.form-pane input:not([type=hidden]),.form-pane select,.form-pane textarea,
+.modal-kaart textarea{
+  width:100%;background:var(--surface);border:1px solid var(--line);color:var(--ink);
+  border-radius:var(--r-sm);padding:9px 11px;font-size:13px;outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+.form-pane textarea,.modal-kaart textarea{min-height:84px;resize:vertical;line-height:1.4}
+.form-pane input:focus,.form-pane select:focus,.form-pane textarea:focus,
+.modal-kaart select:focus,.modal-kaart textarea:focus{
+  border-color:var(--accent);box-shadow:0 0 0 3px var(--focus);
+}
+.form-pane :disabled,.modal-kaart :disabled{
+  background:var(--surface-2);color:var(--ink-70);opacity:1;cursor:not-allowed;
+}
+.form-pane input::placeholder,.form-pane textarea::placeholder,.modal-kaart textarea::placeholder{color:var(--muted);opacity:.8}
+
+.required::after{content:" *";color:var(--accent)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.row2 > div{min-width:0}
+.hint{margin-top:5px;color:var(--muted);font-size:10.5px;line-height:1.4}
+
+/* pil onder een keuzeveld als er een reden is vastgelegd */
+.info-pill{
+  display:none;margin-top:8px;padding:7px 10px;border-radius:var(--r-sm);
+  background:var(--accent-soft);color:var(--accent-ink);font-size:11px;font-weight:600;line-height:1.35;
+}
+
+/* verplicht veld dat bij indienen leeg bleek */
+.form-pane .veld-mist{border-color:var(--accent)!important;background:var(--accent-soft)}
+.form-pane .veld-mist:focus{box-shadow:0 0 0 3px var(--focus)}
+
+/* melding bovenaan: lijst met wat ontbreekt */
+#meldingen .melding ul{margin:6px 0 0 18px}
+#meldingen .melding li{margin:2px 0}
+#meldingen .melding strong{font-weight:700}
+#melding_regels:focus{outline:none}
+
+/* ---- vaste voet met knoppen ---- */
+.pane-voet{
+  flex:0 0 auto;background:var(--surface);border-top:1px solid var(--line);
+  padding:12px 26px 14px;
+}
+.voet-status{font-size:11.5px;color:var(--muted);line-height:1.4;min-height:16px;margin-bottom:8px}
+.voet-status.fout-tekst{color:var(--accent);font-weight:600}
+.voet-status.ok-tekst{color:var(--ok);font-weight:600}
+.voet-knoppen{display:grid;grid-template-columns:1fr 1fr 1.5fr;gap:8px}
+.voet-knoppen.alleen-print{grid-template-columns:1fr}
+.voet-knoppen .knop-sec{padding:11px 10px;font-size:12px;border-radius:var(--r-sm)}
+.voet-knoppen .knop-primair{margin-top:0;width:100%;padding:11px 12px;font-size:12.5px;border-radius:var(--r-sm)}
+.knop-sec:disabled{opacity:.55;cursor:default}
+.knop-sec:disabled:hover{border-color:var(--line);color:var(--ink)}
+.knop-primair:disabled:hover{background:var(--accent)}
+.form-pane button:focus-visible,.modal-kaart button:focus-visible,.kaart button:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px;
+}
+
+/* ============ VENSTER VOOR REDEN EN TOELICHTING ============ */
+.modal-backdrop{
+  position:fixed;inset:0;z-index:999;overflow:auto;padding:18px;
+  background:color-mix(in srgb,var(--ink) 55%,transparent);
+  display:flex;align-items:flex-start;justify-content:center;
+  animation:vervaag-in var(--duur) var(--ease-out) both;
+}
+.modal-kaart{width:460px;max-width:100%;margin:10vh 0 0;padding:26px 26px 22px}
+/* .kaart zet zijn eigen binnenkomst; het venster zoomt in */
+.modal-kaart.zoom-in{animation:zoom-in var(--duur) var(--ease-out) both}
+.modal-kaart h3{font-size:17px;font-weight:800;letter-spacing:-.01em}
+.modal-intro{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.45}
+.modal-kaart select{margin-bottom:0}
+.modal-fout{color:var(--accent);font-size:12px;font-weight:600;margin-top:10px;min-height:16px}
+.modal-kaart .knop-rij{margin-top:8px}
+.modal-kaart .knop-rij .knop-primair{margin-top:0;width:100%;padding:11px 12px;font-size:12.5px;border-radius:var(--r-sm)}
+.modal-kaart .knop-rij .knop-sec{padding:11px 12px;font-size:12.5px;border-radius:var(--r-sm)}
+
+/* ============ VOORBEELD (rechts) ============ */
+.preview{
+  flex:1 1 auto;min-width:0;display:flex;justify-content:center;align-items:flex-start;
+  padding:36px 30px;background:var(--surface-2);
+}
+
+/* ============ A4-BLAD ============
+   Rustige opmaak, los van de app: wit vlak, antracietkleurige tekst, dunne lijnen.
+   Dezelfde regels gelden op het scherm en op papier; bij printen valt alleen de
+   schaduw en de marge weg. */
+.sheet{
+  width:210mm;max-width:100%;min-height:297mm;
+  background:var(--surface);color:var(--ink);
+  box-shadow:var(--shadow-card);
+  padding:14mm 13mm 12mm;
+  font-size:11px;line-height:1.35;
+}
+.print-header{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
+  padding-bottom:4mm;margin-bottom:6mm;border-bottom:1px solid var(--accent);
+}
+.print-header img{height:26px;width:auto;display:block}
+.print-titel{text-align:right}
+.print-header h1{font-size:16px;font-weight:800;letter-spacing:-.01em}
+.print-header p{margin-top:2px;font-size:11px;color:var(--ink-70)}
+.print-header p span{font-weight:700;color:var(--ink)}
+
+.print-section{margin-bottom:5mm;break-inside:avoid;page-break-inside:avoid}
+.print-section h3{
+  font-size:11.5px;font-weight:700;letter-spacing:-.005em;margin-bottom:2mm;
+  padding-bottom:1.5mm;border-bottom:1px solid var(--line);
+}
+.print-grid{display:grid;grid-template-columns:1fr 1fr;gap:2mm 8mm}
+.print-item{border-bottom:1px solid var(--surface-2);padding-bottom:1.5mm;min-height:10mm;min-width:0;overflow-wrap:anywhere}
+.print-item strong{display:block;font-size:9px;font-weight:600;color:var(--muted);margin-bottom:.8mm}
+.print-item span{font-size:11px;white-space:pre-wrap}
+.print-wide{grid-column:1 / -1}
+
+/* ============ SMAL SCHERM ============ */
+@media (max-width:900px){
+  .app{flex-direction:column}
+  .form-pane{
+    width:100%;flex:none;height:auto;position:static;overflow:visible;
+    border-right:none;border-bottom:1px solid var(--line);
+  }
+  .pane-scroll{overflow:visible;padding:22px 18px 20px}
+  .pane-voet{position:static;padding:12px 18px 18px}
+  .preview{padding:20px 12px 28px}
+  .sheet{width:100%;min-height:0;padding:9mm 7mm}
+  /* 16px voorkomt dat iOS bij het invullen inzoomt */
+  .form-pane input:not([type=hidden]),.form-pane select,.form-pane textarea,.modal-kaart textarea{font-size:16px}
+}
+@media (max-width:520px){
+  .row2{grid-template-columns:1fr}
+  .print-grid{grid-template-columns:1fr}
+  .voet-knoppen{grid-template-columns:1fr 1fr}
+  .voet-knoppen .knop-primair{grid-column:1 / -1;order:-1}
+  .modal-backdrop{padding:12px}
+  .modal-kaart{margin-top:6vh;padding:22px 18px 18px}
+}
+
+/* ============ PRINTEN: alleen het A4-blad ============ */
+@page{size:A4 portrait;margin:8mm}
+@media print{
+  html,body{background:var(--surface)}
+  .form-pane,.modal-backdrop,.verbindingsfout,#nietGevonden{display:none!important}
+  .app{display:block;min-height:0}
+  .preview{display:block;padding:0;background:none}
+  .sheet{
+    width:auto;max-width:none;min-height:0;padding:0;box-shadow:none;
+    font-size:10.5px;line-height:1.25;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  }
+  .print-section{margin-bottom:3mm}
+  .print-item{min-height:9mm}
+}

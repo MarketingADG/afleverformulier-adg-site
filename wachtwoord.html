@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="nl" class="wacht-op-login">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Wachtwoord · ADG Afleverformulier</title>
+<link rel="stylesheet" href="css/huisstijl.css">
+<link rel="stylesheet" href="css/componenten.css">
+<link rel="stylesheet" href="css/animaties.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.js"
+        integrity="sha384-faMlYZUtkJj+Sh6Bmu/L0GzPcraRWN6CW+9RH3GUrK/Z0WS9tgaNNt0tHiLxsbdb"
+        crossorigin="anonymous"></script>
+<script src="js/config.js"></script>
+<script src="js/gegevens.js"></script>
+<script src="js/sessie.js"></script>
+</head>
+<body>
+
+<!-- Wachtwoord wijzigen. Verplicht bij de eerste keer inloggen: een nieuw account krijgt
+     een tijdelijk wachtwoord, en zolang dat niet is omgezet laat vereisLogin() geen
+     enkele andere pagina toe. Daarna vrijwillig te openen vanaf het startscherm.
+     De database eist naast een geldige sessie ook het huidige wachtwoord, en logt bij
+     succes alle andere apparaten van deze gebruiker uit. -->
+<div class="scherm">
+  <form class="kaart" id="pw_form" novalidate>
+    <h1>ADG<span>.</span> Wachtwoord</h1>
+    <p class="kaart-sub" id="pw_sub">Kies een nieuw wachtwoord.</p>
+    <label for="pw_huidig">Huidig wachtwoord</label>
+    <input id="pw_huidig" type="password" autocomplete="current-password" required>
+    <label for="pw_nieuw">Nieuw wachtwoord</label>
+    <input id="pw_nieuw" type="password" autocomplete="new-password" placeholder="minstens 8 tekens" required>
+    <label for="pw_nieuw2">Nieuw wachtwoord nogmaals</label>
+    <input id="pw_nieuw2" type="password" autocomplete="new-password" required>
+    <button type="submit" class="knop-primair" id="pw_btn">Wachtwoord opslaan</button>
+    <div class="fout" id="pw_error" role="alert"></div>
+    <button type="button" class="knop-klein" id="pw_terug" onclick="location.href='start.html'">Terug naar start</button>
+  </form>
+</div>
+
+<script>
+let ik = null;
+const errEl = document.getElementById("pw_error");
+function toonFout(t) {
+  errEl.textContent = t || "";
+  errEl.classList.remove("schud");
+  if (t) { void errEl.offsetWidth; errEl.classList.add("schud"); }
+}
+
+(async () => {
+  ik = await vereisLogin({ wachtwoordPagina: true });
+  if (!ik) return;
+  if (ik.moet_wachtwoord_wijzigen) {
+    document.getElementById("pw_sub").textContent = "Je werkt nog met het tijdelijke wachtwoord. Kies eerst een eigen wachtwoord, daarna kun je verder.";
+    document.getElementById("pw_terug").classList.add("hidden");
+  } else {
+    document.getElementById("pw_sub").textContent = "Kies een nieuw wachtwoord. Op dit apparaat blijf je ingelogd, op andere apparaten moet je opnieuw inloggen.";
+  }
+  document.getElementById("pw_huidig").focus();
+})();
+
+document.getElementById("pw_form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const huidig = document.getElementById("pw_huidig").value;
+  const nieuw = document.getElementById("pw_nieuw").value;
+  const nieuw2 = document.getElementById("pw_nieuw2").value;
+  if (!huidig || !nieuw) { toonFout("Vul je huidige en je nieuwe wachtwoord in."); return; }
+  if (nieuw.length < 8) { toonFout("Kies een wachtwoord van minstens 8 tekens."); return; }
+  if (nieuw !== nieuw2) { toonFout("De twee nieuwe wachtwoorden zijn niet gelijk."); return; }
+  if (nieuw === huidig) { toonFout("Kies een ander wachtwoord dan je huidige."); return; }
+  const btn = document.getElementById("pw_btn");
+  btn.disabled = true; btn.classList.add("btn-busy");
+  const { error } = await rpcMetSessie("wachtwoord_wijzigen", { p_huidig: huidig, p_nieuw: nieuw });
+  btn.disabled = false; btn.classList.remove("btn-busy");
+  if (error) { toonFout(error.message || "Opslaan is niet gelukt, probeer het opnieuw."); return; }
+  ik.moet_wachtwoord_wijzigen = false;
+  setAuth(ik);
+  location.replace("start.html");
+});
+</script>
+</body>
+</html>

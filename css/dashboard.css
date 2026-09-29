@@ -1,0 +1,86 @@
+/* Alleen wat dashboard.html extra nodig heeft bovenop componenten.css. */
+
+.scherm.boven{padding-bottom:40px}
+.dash-filters .ruimte{flex:1}
+.dash-filters select{width:auto}
+
+/* een eigen kleurvlak voor fouten en lege staten binnen een sectie */
+.leeg-sectie{font-size:12px;color:var(--muted);padding:6px 0 4px}
+
+/* tegels: de laatste regel is "x van y" */
+.tile{animation-fill-mode:backwards}
+.tile.in-beeld{animation-fill-mode:backwards}
+.tile .sub{font-size:11px;color:var(--ink-70);margin-top:6px;font-variant-numeric:tabular-nums}
+.tile .big.ok{color:var(--ok)}
+.tile .big.laat{color:var(--accent)}
+.tile.laadvlak{height:104px;border:1px solid var(--line);border-radius:12px}
+
+/* balken groeien in met transform vanaf links, niet met width */
+@keyframes groei{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.lb-row .bar{
+  transform-origin:left center;
+  animation:groei 500ms var(--ease-out) both;
+  animation-delay:calc(var(--i,0) * 40ms + 80ms);
+}
+.lb-row .n{font-variant-numeric:tabular-nums}
+
+/* kolombreedtes: de gedeelde .lb-row heeft 66px voor het getal, hier is meer nodig */
+.dash-kolommen .lb-row{grid-template-columns:150px 1fr 92px}
+.dash-kolommen .lb-row.reden{grid-template-columns:150px 1fr 34px}
+#d_verkopers .lb-row{grid-template-columns:150px 1fr 176px}
+#d_vestigingen .lb-row{grid-template-columns:150px 1fr 66px}
+
+/* polis en financiering naast elkaar */
+.dash-kolommen{display:grid;grid-template-columns:1fr 1fr;gap:12px 32px}
+.dash-kolommen h3{font-size:12px;font-weight:700;margin:0 0 10px}
+.dash-kolommen h4{font-size:11px;font-weight:700;color:var(--muted);margin:14px 0 8px}
+.dash-kolommen .geen{font-size:11.5px;color:var(--muted);margin-bottom:8px}
+
+/* labels in de tabel met aankomende afleveringen */
+.ds-tbl .lbl-rij{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;white-space:nowrap;margin-left:4px}
+.ds-tbl .lbl-laat{background:var(--accent-soft);color:var(--accent-ink)}
+.ds-tbl .lbl-open{background:var(--warn-soft);color:var(--warn);border:1px solid #fcd34d}
+.ds-tbl td.tijd{white-space:nowrap;font-variant-numeric:tabular-nums}
+.ds-tbl td.dag{white-space:nowrap}
+
+/* laadvormen */
+.laad-tabel .laadvlak{height:34px;margin-bottom:6px}
+.laad-rij .laadvlak{height:16px;margin-bottom:8px;border-radius:8px}
+
+/* de lijst met laatste formulieren volgt de stijl van het overzicht */
+#d_laatste .lijst-item{min-width:0}
+#d_laatste .links{min-width:0;flex:1}
+#d_laatste .who{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#d_laatste .who .zonder{font-weight:600;color:var(--muted)}
+#d_laatste .meta2{overflow-wrap:anywhere;line-height:1.4}
+#d_laatste .rechts{text-align:right;flex:none}
+#d_laatste .nr{font-weight:700;font-size:12px;font-variant-numeric:tabular-nums}
+#d_laatste .lijst-item.in-beeld{animation-fill-mode:backwards}
+#d_laatste .lijst-item:focus-visible,.ds-tbl tr.klik:focus-visible{outline:none;box-shadow:0 0 0 3px var(--focus)}
+.melding .knop-sec{margin-left:10px;padding:5px 10px}
+
+@media (max-width:768px){
+  .kaart.dash{padding:20px 16px}
+  .scherm.boven{padding:16px 10px 32px}
+  .dash-filters select{flex:1 1 100%}
+  .dash-filters .ruimte{display:none}
+  .dash-filters .knop-sec{flex:1}
+  .dash-tiles{grid-template-columns:1fr}
+  .tile{display:grid;grid-template-columns:76px 1fr;column-gap:14px;align-items:center;padding:12px 16px}
+  .tile .big{grid-row:1 / span 2}
+  .tile .lbl{margin-top:0}
+  .tile .sub{margin-top:0}
+  .dash-kolommen{grid-template-columns:1fr}
+  .dash-kolommen .lb-row,.dash-kolommen .lb-row.reden,#d_verkopers .lb-row,#d_vestigingen .lb-row{
+    grid-template-columns:1fr auto;row-gap:4px}
+  .lb-row .track{grid-column:1 / -1;grid-row:2}
+  .ds-tbl{min-width:640px}
+  #d_laatste .lijst-item{flex-wrap:wrap}
+  #d_laatste .links{flex-basis:100%}
+  #d_laatste .rechts{text-align:left}
+}
+
+/* een balk van 0 is geen sliver */
+.lb-row .bar.nul{min-width:0}
+.dash-tiles .leeg-sectie{grid-column:1 / -1}
+.lb-row .track,.lb-row .bar{display:block}
