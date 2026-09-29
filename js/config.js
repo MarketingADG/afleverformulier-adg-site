@@ -6,5 +6,5 @@
    Zie docs/db/schema.sql. De geheime service-sleutel komt hier nooit. */
 const AFLEVER_CONFIG = {
   url: "https://oveguihjtreqxoavlmpw.supabase.co",
-  key: "VUL_IN"   /* publishable key, ophalen met de MCP-tool get_publishable_keys */
+  key: "sb_publishable_dElZC9SL_OOZEqPt11lk5w_CFy6HDgt"
 };
