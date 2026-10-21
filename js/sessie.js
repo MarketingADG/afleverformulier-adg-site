@@ -89,7 +89,8 @@ async function vereisLogin(opties) {
     naam: rij.naam || "",
     can_dashboard: !!rij.can_dashboard,
     can_bewerk_alle: !!rij.can_bewerk_alle,
-    moet_wachtwoord_wijzigen: !!rij.moet_wachtwoord_wijzigen
+    moet_wachtwoord_wijzigen: !!rij.moet_wachtwoord_wijzigen,
+    vestiging: rij.vestiging || ""   // vaste vestiging uit het account, leeg = nog niet ingesteld
   };
   setAuth(ik);
   /* nog op het tijdelijke wachtwoord: geen enkele andere pagina, ook niet via de adresbalk */

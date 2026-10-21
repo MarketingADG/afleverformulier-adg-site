@@ -10,7 +10,6 @@
   const DAG_MS = 86400000;
   const DEADLINE_DAGEN = 6;   // uiterlijk 6 dagen voor de aflevering indienen
   const KOMEND_DAGEN = 14;
-  const GEEN_REDEN = "Geen reden ingevuld";
 
   let alle = [];
   let eersteRender = true;
@@ -58,25 +57,6 @@
     return plusDagen(dagStart(nu), -(Number(fl.periode) - 1));   // vandaag telt mee
   }
 
-  /* ---------- polis en financiering ---------- */
-  function pfTelling(rijen, voor) {
-    const invullen = rijen.filter(f => ["Ja", "Nee"].includes(veld(f, voor + "_besproken")));
-    const besproken = invullen.filter(f => veld(f, voor + "_besproken") === "Ja").length;
-    const afgesloten = invullen.filter(f => veld(f, voor + "_afgesloten") === "Ja").length;
-    const tel = new Map();
-    const teltReden = (lijst, sleutelNaam) => {
-      const m = new Map();
-      lijst.forEach(f => { const r = veld(f, sleutelNaam) || GEEN_REDEN; m.set(r, (m.get(r) || 0) + 1); });
-      return [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "nl"));
-    };
-    return {
-      basis: invullen.length, besproken, afgesloten,
-      nietBesproken: teltReden(invullen.filter(f => veld(f, voor + "_besproken") === "Nee"), voor + "_besproken_reden"),
-      // niet afgesloten telt alleen als het wel besproken is; bij niet besproken wordt afgesloten automatisch nee
-      nietAfgesloten: teltReden(invullen.filter(f => veld(f, voor + "_besproken") === "Ja" && veld(f, voor + "_afgesloten") === "Nee"), voor + "_afgesloten_reden")
-    };
-  }
-  const pct = (a, b) => b ? Math.round(100 * a / b) : 0;
 
   /* ---------- kleine bouwstenen ---------- */
   const cap = i => Math.min(i, 12);
@@ -96,9 +76,9 @@
   function laadStaat() {
     $("d_fout").innerHTML = "";
     $("d_komend").innerHTML = '<div class="laad-tabel">' + '<div class="laadvlak"></div>'.repeat(5) + "</div>";
-    $("d_tegels").innerHTML = '<div class="tile laadvlak"></div>'.repeat(5);
+    $("d_tegels").innerHTML = '<div class="tile laadvlak"></div>'.repeat(3);
     const rijen = '<div class="laad-rij">' + '<div class="laadvlak"></div>'.repeat(4) + "</div>";
-    ["d_pf", "d_verkopers", "d_vestigingen"].forEach(id => { $(id).innerHTML = rijen; });
+    ["d_verkopers", "d_vestigingen"].forEach(id => { $(id).innerHTML = rijen; });
     $("d_laatste").innerHTML = '<div class="laadvlak laadregel"></div>'.repeat(3);
   }
 
@@ -110,7 +90,7 @@
       .sort((a, b) => (a.afleverdatum + " " + (a.aflevertijd || "99")).localeCompare(b.afleverdatum + " " + (b.aflevertijd || "99")));
     if (!rijen.length) { $("d_komend").innerHTML = leeg("Geen afleveringen in de komende 14 dagen."); return; }
     $("d_komend").innerHTML = `<table class="ds-tbl"><thead><tr>
-      <th>Datum</th><th>Tijd</th><th>Klant</th><th>Vestiging</th><th>Soort</th><th>Verkoper</th><th>Status</th></tr></thead><tbody>` +
+      <th>Datum</th><th>Klant</th><th>Vestiging</th><th>Soort</th><th>Verkoper</th><th>Status</th></tr></thead><tbody>` +
       rijen.map(f => {
         const naam = (f.klantnaam || "").trim();
         let lbl = "";
@@ -118,7 +98,6 @@
         else if (!isIngediend(f) && f.afleverdatum <= binnen6) lbl = '<span class="lbl-rij lbl-open">nog niet ingediend</span>';
         return `<tr class="klik" tabindex="0" role="link" data-id="${esc(f.id)}">
           <td class="dag">${esc(dagKort(f.afleverdatum))}</td>
-          <td class="tijd">${esc(f.aflevertijd || "")}</td>
           <td>${naam ? esc(naam) : '<span class="leeg">Zonder klantnaam</span>'}<div class="sub">${esc(f.id)}</div></td>
           <td>${esc(f.vestiging || "")}</td><td>${esc(soortVan(f))}</td>
           <td>${esc(f.verkoper_naam || f.verkoper || "")}</td>
@@ -129,39 +108,14 @@
   function tekenTegels(rijen, ingediend, animeer) {
     if (!rijen.length) { $("d_tegels").innerHTML = leeg("Geen formulieren in deze periode met deze filters."); return; }
     const laat = ingediend.filter(teLaat).length;
-    const polis = pfTelling(ingediend, "polis"), fin = pfTelling(ingediend, "fin");
     const tegel = (i, groot, label, sub, klas) =>
       `<div class="tile${animeer ? " in-beeld" : ""}" style="--i:${i}"><div class="big${klas ? " " + klas : ""}">${groot}</div>
        <div class="lbl">${esc(label)}</div>${sub ? `<div class="sub">${esc(sub)}</div>` : ""}</div>`;
-    const pf = (t, i, label) => t.basis
-      ? tegel(i, pct(t.afgesloten, t.basis) + "%", label, `${t.afgesloten} van ${t.basis}`, "ok")
-      : tegel(i, "–", label, "nog geen ingediende met antwoord");
     const concepten = rijen.length - ingediend.length;
     $("d_tegels").innerHTML =
       tegel(0, rijen.length, "Formulieren", "concept en ingediend") +
       tegel(1, ingediend.length, "Ingediend", concepten ? `${concepten} nog concept` : "geen concepten") +
-      tegel(2, laat, "Te laat ingediend", ingediend.length ? `${laat} van ${ingediend.length} ingediend` : "nog niets ingediend", laat ? "laat" : "") +
-      pf(polis, 3, "Polis afgesloten") + pf(fin, 4, "Financiering afgesloten");
-  }
-
-  function pfKolom(titel, t, offset) {
-    if (!t.basis) return `<div><h3>${esc(titel)}</h3>${leeg("Nog geen ingediende formulieren met antwoord.")}</div>`;
-    const lijst = (kop, regels, leegTekst) => {
-      if (!regels.length) return `<h4>${esc(kop)}</h4><div class="geen">${esc(leegTekst)}</div>`;
-      const max = regels[0][1];
-      return `<h4>${esc(kop)}</h4>` + regels.map(([r, n], i) =>
-        balk(r, 100 * n / max, `${n}`, i, { reden: true })).join("");
-    };
-    return `<div><h3>${esc(titel)}</h3>` +
-      balk("Besproken", pct(t.besproken, t.basis), `${pct(t.besproken, t.basis)}% <em>${t.besproken}/${t.basis}</em>`, 0) +
-      balk("Afgesloten", pct(t.afgesloten, t.basis), `${pct(t.afgesloten, t.basis)}% <em>${t.afgesloten}/${t.basis}</em>`, 1, { ok: true }) +
-      lijst("Redenen niet besproken", t.nietBesproken, "Alles is besproken.") +
-      lijst("Redenen niet afgesloten, wel besproken", t.nietAfgesloten, "Alles wat besproken is, is afgesloten.") + "</div>";
-  }
-  function tekenPF(ingediend) {
-    if (!ingediend.length) { $("d_pf").innerHTML = leeg("Geen ingediende formulieren in deze periode."); return; }
-    $("d_pf").innerHTML = '<div class="dash-kolommen">' +
-      pfKolom("Polis", pfTelling(ingediend, "polis")) + pfKolom("Financiering", pfTelling(ingediend, "fin")) + "</div>";
+      tegel(2, laat, "Te laat ingediend", ingediend.length ? `${laat} van ${ingediend.length} ingediend` : "nog niets ingediend", laat ? "laat" : "");
   }
 
   function tekenVerkopers(rijen) {
@@ -175,10 +129,7 @@
     const lijst = [...per.values()].sort((a, b) => b.rijen.length - a.rijen.length || a.naam.localeCompare(b.naam, "nl"));
     const max = lijst[0].rijen.length;
     $("d_verkopers").innerHTML = lijst.map((v, i) => {
-      const ing = v.rijen.filter(isIngediend);
-      const p = pfTelling(ing, "polis"), fi = pfTelling(ing, "fin");
-      return balk(v.naam, 100 * v.rijen.length / max,
-        `${v.rijen.length} <em>polis ${p.afgesloten}/${p.basis} · fin ${fi.afgesloten}/${fi.basis}</em>`, i);
+      return balk(v.naam, 100 * v.rijen.length / max, `${v.rijen.length}`, i);
     }).join("");
   }
 
@@ -226,7 +177,6 @@
     const ingediend = rijen.filter(isIngediend);
     tekenKomend(fl);
     tekenTegels(rijen, ingediend, eersteRender);
-    tekenPF(ingediend);
     tekenVerkopers(rijen);
     tekenVestigingen(rijen);
     tekenLaatste(rijen, eersteRender);
@@ -240,7 +190,7 @@
     const { data, error } = await rpcMetSessie("dashboard_formulieren");
     if (nr !== bezig) return;
     if (error) {
-      ["d_komend", "d_tegels", "d_pf", "d_verkopers", "d_vestigingen", "d_laatste"].forEach(id => { $(id).innerHTML = ""; });
+      ["d_komend", "d_tegels", "d_verkopers", "d_vestigingen", "d_laatste"].forEach(id => { $(id).innerHTML = ""; });
       $("d_fout").innerHTML = `<div class="melding let-op" style="margin-top:14px">Het dashboard kon niet worden geladen. ${esc(error.message || "")}
         <button type="button" class="knop-sec" id="d_opnieuw">Opnieuw</button></div>`;
       $("d_opnieuw").onclick = laad;

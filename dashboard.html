@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <title>ADG Afleverdashboard</title>
-<link rel="stylesheet" href="css/huisstijl.css">
-<link rel="stylesheet" href="css/componenten.css">
-<link rel="stylesheet" href="css/animaties.css">
-<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/huisstijl.css?v=20261021">
+<link rel="stylesheet" href="css/componenten.css?v=20261021">
+<link rel="stylesheet" href="css/animaties.css?v=20261021">
+<link rel="stylesheet" href="css/dashboard.css?v=20261021">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.js"
         integrity="sha384-faMlYZUtkJj+Sh6Bmu/L0GzPcraRWN6CW+9RH3GUrK/Z0WS9tgaNNt0tHiLxsbdb"
         crossorigin="anonymous"></script>
-<script src="js/config.js"></script>
-<script src="js/gegevens.js"></script>
-<script src="js/sessie.js"></script>
+<script src="js/config.js?v=20261021"></script>
+<script src="js/gegevens.js?v=20261021"></script>
+<script src="js/sessie.js?v=20261021"></script>
 </head>
 <body>
 
@@ -32,9 +32,9 @@
         <option value="jaar">Dit jaar</option>
       </select>
       <select id="d_soort" aria-label="Soort voertuig">
-        <option value="">Nieuw en occasion</option>
+        <option value="">Nieuw en gebruikt</option>
         <option value="Nieuw">Alleen nieuw</option>
-        <option value="Occasion">Alleen occasions</option>
+        <option value="Occasion">Alleen gebruikt</option>
       </select>
       <select id="d_vestiging" aria-label="Vestiging"></select>
       <span class="ruimte"></span>
@@ -52,12 +52,7 @@
     <div class="lb-note" id="d_periode_note">Op aanmaakdatum van het formulier.</div>
     <div class="dash-tiles" id="d_tegels"></div>
 
-    <div class="dash-h">Polis en financiering</div>
-    <div class="lb-note">Alleen ingediende formulieren waar de vraag is ingevuld. Percentages zijn afgerond op hele getallen.</div>
-    <div id="d_pf"></div>
-
     <div class="dash-h">Per verkoper</div>
-    <div class="lb-note">Aantal formulieren, daarnaast polis en financiering afgesloten van het aantal ingediende met antwoord.</div>
     <div id="d_verkopers"></div>
 
     <div class="dash-h">Per vestiging</div>
@@ -68,6 +63,6 @@
   </div>
 </div>
 
-<script src="js/dashboard.js"></script>
+<script src="js/dashboard.js?v=20261021"></script>
 </body>
 </html>
