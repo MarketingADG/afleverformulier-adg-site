@@ -346,13 +346,28 @@ function mailRijen(){
    Eén afwijking: de macro schreef bgcolor=#FFFFF0# (hekje te veel). Outlook toont dat als
    gebroken wit, browsers en andere mailprogramma's als knalgeel. Hier staat de bedoelde
    kleur #FFFFF0, zodat de tabel er overal uitziet als in Outlook. */
+/* Op verzoek van Jasper (2026-10-21) beter leesbaar gemaakt: enkele lijnen, ruimte in de
+   cellen, ingevulde waarden vet, kopregels vet op een iets donkerder vlak. Rijen, teksten en
+   volgorde zijn ongewijzigd; de lege derde kolom van de macro is weggelaten. Alles staat
+   inline, omdat Outlook geen stylesheet leest. */
+const MAIL_RAND = "border:1px solid #b5b5a8;";
+const MAIL_CEL = "padding:5px 9px;font-family:Calibri,Arial,sans-serif;font-size:11pt;color:#000;" + MAIL_RAND;
+
 function buildMailHtml(){
-  let c = "<table border=1 bgcolor=#FFFFF0>";
+  let c = '<table border=1 cellspacing=0 cellpadding=5 bgcolor=#FFFFF0 style="border-collapse:collapse;' + MAIL_RAND + '">';
   mailRijen().forEach(([a, b]) => {
-    c += "<tr><td>" + esc(a) + "</td><td>" + esc(b) + "</td><td></td></tr>";
+    if(!a){
+      c += '<tr><td colspan=2 style="height:6px;padding:0;font-size:4pt;line-height:4pt;' + MAIL_RAND + '">&nbsp;</td></tr>';
+      return;
+    }
+    const kop = KOP_RIJEN.includes(a);
+    c += "<tr>" +
+      '<td width=380 style="' + MAIL_CEL + (kop ? "font-weight:bold;background:#EFEFD9;" : "") + '">' + esc(a) + "</td>" +
+      '<td width=200 style="' + MAIL_CEL + (kop ? "background:#EFEFD9;" : "font-weight:bold;") + '">' + esc(b) + "</td>" +
+      "</tr>";
   });
-  c += "</table><P></P><P></P>";
-  c += "<P>Verkoper: " + esc(verkoperNaam) + "</P>";
+  c += "</table><P></P>";
+  c += '<P style="font-family:Calibri,Arial,sans-serif;font-size:11pt">Verkoper: <b>' + esc(verkoperNaam) + "</b></P>";
   return c;
 }
 
